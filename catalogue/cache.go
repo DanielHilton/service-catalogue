@@ -8,7 +8,7 @@ import (
 
 type Cache struct {
 	url     string
-	entries []Entry
+	Entries []Entry
 }
 
 func NewCache(url string) *Cache {
@@ -24,7 +24,7 @@ func NewCache(url string) *Cache {
 
 	if resp.StatusCode == http.StatusOK {
 		body, _ := ioutil.ReadAll(resp.Body)
-		json.Unmarshal(body, &c.entries)
+		json.Unmarshal(body, &c.Entries)
 	}
 
 	return c
