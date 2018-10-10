@@ -13,3 +13,6 @@
 
 vendor
 .idea
+.DS_Store
+objects/
+refs/

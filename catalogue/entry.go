@@ -8,9 +8,9 @@ type Entry struct {
 	Protocol     string
 	Format       string
 	Dependencies struct {
-		Critical    []interface{}
-		Noncritical []interface{} `json:"non-critical"`
-	}
+		Critical    []Dependency `json:"critical"`
+		Noncritical []Dependency `json:"non-critical"`
+	} `json:"dependencies"`
 	Environment []string
 	Mievents    []string
 	Metrics     []string

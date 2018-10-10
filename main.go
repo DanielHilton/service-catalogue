@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"net/http"
 	"os"
@@ -15,7 +16,8 @@ var cache *catalogue.Cache
 func main() {
 	fmt.Printf("Welcome to service catalogue backend.\n")
 
-	cache = catalogue.NewCache(os.Getenv("CATALOGUE_URL"))
+	var err error
+	cache, err = catalogue.NewCache(os.Getenv("CATALOGUE_URL"))
 	if cache == nil {
 		fmt.Printf("fuck")
 		os.Exit(1)
@@ -23,7 +25,9 @@ func main() {
 	// Setup router
 	router := mux.NewRouter()
 	router.HandleFunc("/", HomeHandler)
-	err := http.ListenAndServe(fmt.Sprintf(":%d", port), router)
+	router.HandleFunc("/refresh", RefreshCacheHandler)
+	loggingRouter := handlers.CombinedLoggingHandler(os.Stdout, router)
+	err = http.ListenAndServe(fmt.Sprintf(":%d", port), loggingRouter)
 	if err != nil {
 		fmt.Printf(fmt.Sprintf("Failed to listen on %d", port))
 	}
@@ -38,4 +42,17 @@ func HomeHandler(w http.ResponseWriter, _ *http.Request) {
 	}
 
 	fmt.Fprintf(w, buf.String())
+}
+
+func RefreshCacheHandler(w http.ResponseWriter, _ *http.Request) {
+	var err error
+	cache, err = catalogue.NewCache(os.Getenv("CATALOGUE_URL"))
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "Failed to refresh cache")
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Cache updated")
 }
