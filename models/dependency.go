@@ -1,4 +1,4 @@
-package catalogue
+package models
 
 type Dependency struct {
 	Name string `json:"name"`

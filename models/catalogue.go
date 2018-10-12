@@ -1,4 +1,4 @@
-package catalogue
+package models
 
 import (
 	"encoding/json"
@@ -6,13 +6,13 @@ import (
 	"net/http"
 )
 
-type Cache struct {
+type Catalogue struct {
 	url     string
 	Entries []Entry
 }
 
-func NewCache(url string) (c *Cache, e error) {
-	c = new(Cache)
+func NewCatalogue(url string) (c *Catalogue, e error) {
+	c = new(Catalogue)
 	c.url = url
 
 	var client http.Client

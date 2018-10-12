@@ -1,4 +1,4 @@
-package catalogue
+package models
 
 type Entry struct {
 	Name         string
