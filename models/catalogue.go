@@ -32,3 +32,14 @@ func NewCatalogue(url string) (c *Catalogue, e error) {
 
 	return c, nil
 }
+
+func GetEntryFromCatalogue(name string, c *Catalogue) (e Entry) {
+	for _, entry := range c.Entries {
+		if entry.Name == name {
+			e = entry
+			break
+		}
+	}
+
+	return e
+}

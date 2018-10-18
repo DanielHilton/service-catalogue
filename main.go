@@ -17,8 +17,9 @@ func main() {
 	// Setup router
 	router := mux.NewRouter()
 	router.HandleFunc("/", routes.HomeHandler)
-	router.HandleFunc("/catalogue", routes.GetCatalogueHandler)
-	router.HandleFunc("/catalogue/refresh", routes.RefreshCatalogueHandler)
+	router.HandleFunc("/catalogue", routes.GetCatalogueHandler).Methods("GET")
+	router.HandleFunc("/catalogue/refresh", routes.RefreshCatalogueHandler).Methods("GET")
+	router.HandleFunc("/catalogue/{serviceName}", routes.GetServiceHandler).Methods("GET")
 
 	// Logging middleware
 	loggingRouter := handlers.CombinedLoggingHandler(os.Stdout, router)
